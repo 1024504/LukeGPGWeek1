@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
-	public int playerNumber;
-	public int[] diceRolls;
-	public bool isDiceLocked = true;
-	public int noOfDiceLock;
-}
-
 public class GameManager : MonoBehaviour
 {
 	// Even numbers are player 1's turn.
@@ -37,7 +29,6 @@ public class GameManager : MonoBehaviour
 		player = new Player[totalPlayers];
 		for (int i = 0; i < totalPlayers; i++)
 		{
-			player[i].playerNumber = i+1;
 			player[i].diceRolls = new int[totalDice];
 		}
 
@@ -61,7 +52,7 @@ public class GameManager : MonoBehaviour
 							player[playerIndex].diceRolls[j] = Roll();
 						}
 
-						Debug.Log("Player " + player[playerIndex].playerNumber + " rolled a total of " +
+						Debug.Log("Player " + playerIndex+1 + " rolled a total of " +
 						          player[playerIndex].diceRolls.Sum());
 					}
 					
