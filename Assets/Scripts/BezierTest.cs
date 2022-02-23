@@ -32,10 +32,11 @@ public class BezierTest : MonoBehaviour
 	
 	private IEnumerator RunBezierReverse()
 	{
+		Vector3 temp;
 		gameObject.transform.position = Bezier.BezierFunction(cPPositions, 1);
 		for (float t = duration*smoothness-1; t > 0; t--)
 		{
-			Vector3 temp = gameObject.transform.position;
+			temp = gameObject.transform.position;
 			for (var i = 0; i < controlPoints.Count; i++)
 			{
 				cPPositions[i] = controlPoints[i].transform.position;
@@ -45,7 +46,9 @@ public class BezierTest : MonoBehaviour
 			
 			yield return new WaitForSeconds(1/smoothness);
 		}
+		temp = gameObject.transform.position;
 		gameObject.transform.position = Bezier.BezierFunction(cPPositions, 0);
+		Debug.DrawLine(temp, gameObject.transform.position, Color.green, duration * 2);
 	}
 
 	void Awake()

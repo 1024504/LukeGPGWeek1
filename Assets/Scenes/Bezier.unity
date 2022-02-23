@@ -290,9 +290,9 @@ MonoBehaviour:
   controlPoints: []
   cPPositions: []
   numberOfCPs: 10
-  spawnRange: 100
-  duration: 5
-  smoothness: 60
+  spawnRange: 50
+  duration: 2
+  smoothness: 100
 --- !u!1 &2140975282
 GameObject:
   m_ObjectHideFlags: 0
