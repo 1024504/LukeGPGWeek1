@@ -17,6 +17,6 @@ public class Car : MonoBehaviour
     {
 	    localVelocity = transform.InverseTransformDirection(GetComponent<Rigidbody>().velocity);
 	    //Debug.Log(localVelocity);
-	    GetComponent<Rigidbody>().AddRelativeForce(new Vector3 (0, 0, -(Mathf.Clamp((localVelocity.z),-8, 8))));
+	    GetComponent<Rigidbody>().AddRelativeForce(new Vector3 (0, 0, -(Mathf.Clamp((localVelocity.x),-8, 8))));
     }
 }

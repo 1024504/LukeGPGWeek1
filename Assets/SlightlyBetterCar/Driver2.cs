@@ -5,11 +5,17 @@ using UnityEngine;
 public class Driver2 : MonoBehaviour
 {
 	public GameObject car;
+	private Rigidbody chassis;
+	public float acceleratingForce = 5f;
+	public float brakingForce = 10f;
+	public float reversingForce = 3f;
+	public float turningTorque = 3f;
+	
 
 	// Start is called before the first frame update
     void Start()
     {
-	    
+	    chassis = car.GetComponentInChildren<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -17,18 +23,36 @@ public class Driver2 : MonoBehaviour
     {
 	    if (Input.GetKey(KeyCode.UpArrow)||Input.GetKey(KeyCode.W))
 	    {
-		    
-		    car.GetComponentInChildren<Rigidbody>().AddRelativeForce(new Vector3 (5,0,0));
+		    if (Vector3.Dot(chassis.velocity,car.transform.TransformDirection(Vector3.forward)) < 0)
+		    {
+			    chassis.AddRelativeForce(new Vector3(0, 0, brakingForce));
+		    }
+		    else
+		    {
+			    chassis.AddRelativeForce(new Vector3(0, 0, acceleratingForce));
+		    }
+	    }
+	    
+	    if (Input.GetKey(KeyCode.DownArrow)||Input.GetKey(KeyCode.S))
+	    {
+		    if (Vector3.Dot(chassis.velocity,car.transform.TransformDirection(Vector3.forward)) > 0)
+		    {
+			    chassis.AddRelativeForce(new Vector3(0, 0, -brakingForce));
+		    }
+		    else
+		    {
+			    chassis.AddRelativeForce(new Vector3(0, 0, -reversingForce));
+		    }
 	    }
 
 	    if (Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.A))
 	    {
-		    car.GetComponentInChildren<Rigidbody>().AddRelativeTorque(new Vector3 (0,-5,0));
+		    chassis.AddRelativeTorque(new Vector3 (0,-turningTorque,0));
 	    }
 	    
 	    if (Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.D))
 	    {
-		    car.GetComponentInChildren<Rigidbody>().AddRelativeTorque(new Vector3(0, 5, 0));
+		    chassis.AddRelativeTorque(new Vector3(0, turningTorque, 0));
 	    }
     }
 }

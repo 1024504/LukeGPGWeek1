@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wheel : MonoBehaviour
+public class Wheel2 : MonoBehaviour
 {
 	public GameObject car;
-	public float stiffness = 0.1f;
+	private Rigidbody chassis;
+	public float springCoefficient = 5f;
+	public float dampingCoefficient = 0.5f;
 	public float maxDistance = 1f;
 	public Vector3 origin;
 	public Vector3 direction;
@@ -16,7 +18,7 @@ public class Wheel : MonoBehaviour
 	// Start is called before the first frame update
     void Start()
     {
-	    
+	    chassis = car.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -29,8 +31,9 @@ public class Wheel : MonoBehaviour
 	    Debug.DrawRay(Ray.origin, Ray.direction, Color.green);
 	    if (Physics.Raycast(Ray, out RaycastHit, maxDistance))
 	    {
-		    Debug.Log(RaycastHit.distance);
-		    car.GetComponent<Rigidbody>().AddForceAtPosition((stiffness/RaycastHit.distance)*transform.TransformDirection(Vector3.up),origin,0);
+		    chassis.AddForceAtPosition((springCoefficient*(maxDistance-RaycastHit.distance)
+		                                -dampingCoefficient*Vector3.Dot(chassis.velocity,car.transform.TransformDirection(Vector3.up)))
+		                               *transform.TransformDirection(Vector3.up),origin,0);
 	    }
     }
 }
