@@ -74,13 +74,13 @@ public class Wheel3 : MonoBehaviour
 		switch (carClass.turningMode)
 		{
 			case Car3.TurningModes.Left:
-				transform.localEulerAngles = new Vector3 (0, -maxRotation, 0);
+				steerAngle = new Vector3 (0, -maxRotation, 0);
 				break;
 			case Car3.TurningModes.Right:
-				transform.localEulerAngles = new Vector3 (0, maxRotation, 0);
+				steerAngle = new Vector3 (0, maxRotation, 0);
 				break;
 			case Car3.TurningModes.Neutral:
-				transform.localEulerAngles = new Vector3 (0, 0, 0);
+				steerAngle = Vector3.zero;
 				break;
 		}
 	}
@@ -110,11 +110,11 @@ public class Wheel3 : MonoBehaviour
 		    if (canSteer)
 		    {
 			    ApplySteering();
+			    transform.localEulerAngles = steerAngle;
 		    }
 		    
-		    chassis.AddForceAtPosition(transform.TransformDirection(new Vector3 (-Mathf.Clamp(
-			    Vector3.Dot(localVelocity, transform.TransformDirection(Vector3.left)) ,-lateralFriction, 
-			    lateralFriction), 0, 0)), origin);
+		    //chassis.AddForceAtPosition(transform.TransformDirection(new Vector3 (transform.InverseTransformDirection(chassis.velocity).x*Mathf.Sin(steerAngle.y), 0, 0)), origin);
+		    //chassis.AddForceAtPosition(transform.TransformDirection(new Vector3 (-Mathf.Clamp(Vector3.Dot(localVelocity, transform.TransformDirection(Vector3.left)) ,-lateralFriction, lateralFriction), 0, 0)), origin);
 	    }
 	}
 }
