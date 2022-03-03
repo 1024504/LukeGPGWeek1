@@ -13,9 +13,10 @@ public class Wheel3 : MonoBehaviour
 	public Vector3 steerAngle;
 	public float springCoefficient = 5f;
 	public float dampingCoefficient = 1.5f;
-	public float maxDistance = 1f;
+	public float restingWheelHeight = 1f;
+	public float wheelExtensionFactor = 1.5f;
 	
-	public float lateralFriction;
+	public float lateralFrictionCoefficient;
 	public float acceleratingForce;
 	public float brakingForce;
 	public float reversingForce;
@@ -31,9 +32,9 @@ public class Wheel3 : MonoBehaviour
 	private bool CheckGroundContact()
 	{
 		Debug.DrawRay(Ray.origin, Ray.direction, Color.green);
-		if (Physics.Raycast(Ray, out RaycastHit, maxDistance))
+		if (Physics.Raycast(Ray, out RaycastHit, restingWheelHeight*wheelExtensionFactor))
 		{
-			chassis.AddForceAtPosition((springCoefficient * (maxDistance - RaycastHit.distance)
+			chassis.AddForceAtPosition((springCoefficient * (restingWheelHeight - RaycastHit.distance)
 			                            - dampingCoefficient * Vector3.Dot(chassis.velocity,
 				                            car.transform.TransformDirection(Vector3.up)))
 			                           * transform.TransformDirection(Vector3.up), origin, 0);
@@ -53,7 +54,10 @@ public class Wheel3 : MonoBehaviour
 				}
 				else
 				{
-					chassis.AddForceAtPosition((acceleratingForce*car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					if (canDrive)
+					{
+						chassis.AddForceAtPosition((acceleratingForce * car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					}
 				}
 				break;
 			case Car3.DrivingModes.Reverse:
@@ -63,7 +67,10 @@ public class Wheel3 : MonoBehaviour
 				}
 				else
 				{
-					chassis.AddForceAtPosition((-reversingForce*car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					if (canDrive)
+					{
+						chassis.AddForceAtPosition((-reversingForce * car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					}
 				}
 				break;
 		}
@@ -102,10 +109,7 @@ public class Wheel3 : MonoBehaviour
 
 	    if (CheckGroundContact())
 	    {
-		    if (canDrive)
-		    {
-			    ApplyDriveForce();
-		    }
+		    ApplyDriveForce();
 		    
 		    if (canSteer)
 		    {
@@ -113,8 +117,8 @@ public class Wheel3 : MonoBehaviour
 			    transform.localEulerAngles = steerAngle;
 		    }
 		    
-		    //chassis.AddForceAtPosition(transform.TransformDirection(new Vector3 (transform.InverseTransformDirection(chassis.velocity).x*Mathf.Sin(steerAngle.y), 0, 0)), origin);
-		    //chassis.AddForceAtPosition(transform.TransformDirection(new Vector3 (-Mathf.Clamp(Vector3.Dot(localVelocity, transform.TransformDirection(Vector3.left)) ,-lateralFriction, lateralFriction), 0, 0)), origin);
+		    chassis.AddForceAtPosition(lateralFrictionCoefficient*chassis.mass*transform.TransformDirection(new Vector3 (-localVelocity.x, 0, 0)), origin);
+		    
 	    }
 	}
 }

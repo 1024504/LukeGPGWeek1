@@ -11,7 +11,7 @@ public class Car3 : MonoBehaviour
 	public float brakingForce = 10f;
 	public float reversingForce = 3f;
 	public float maxWheelRotation = 45f;
-	public float lateralFriction = 8f;
+	public float lateralFrictionCoeffiecient = 8f;
 	
 	public enum DrivingModes
 	{
@@ -42,7 +42,7 @@ public class Car3 : MonoBehaviour
 			{
 				t.GetComponent<Wheel3>().maxRotation = maxWheelRotation;
 			}
-			t.GetComponent<Wheel3>().lateralFriction = lateralFriction;
+			t.GetComponent<Wheel3>().lateralFrictionCoefficient = lateralFrictionCoeffiecient;
 		}
 	}
 	

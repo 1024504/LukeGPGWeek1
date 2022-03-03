@@ -197,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 5975111160745004283}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.22, z: 0}
-  m_LocalScale: {x: 2.029017, y: 1.102514, z: 3.7825186}
+  m_LocalScale: {x: 3.3202834, y: 1.8041539, z: 6.1897135}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5975111160074966193}
@@ -280,7 +280,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5975111160745004283}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 10
   m_UseGravity: 1
@@ -306,11 +306,11 @@ MonoBehaviour:
   - {fileID: 3326051512370029979}
   - {fileID: 5251039562180634894}
   - {fileID: 6350097226787436122}
-  acceleratingForce: 1
+  acceleratingForce: 5
   brakingForce: 10
   reversingForce: 3
-  maxWheelRotation: 45
-  lateralFriction: 1
+  maxWheelRotation: 25
+  lateralFrictionCoeffiecient: 0.5
   drivingMode: 1
   turningMode: 1
 --- !u!1001 &3669129245245053424
