@@ -10,15 +10,17 @@ public class ScoreView : MonoBehaviour
 	public GameManagerWeek5 gameManager;
 	public TextMeshProUGUI announcerTextMesh;
 	public TextMeshProUGUI scoreTextMesh;
-	private string tempAnnouncement = "";
+	private List<string> tempAnnouncement = new List<string> {"","","","",""};
 	private List<string> tempScores;
 	private int noOfDice;
 	void DisplayMessage(string announcement)
 	{
-		string line1 = tempAnnouncement;
-		string line2 = announcement;
-		tempAnnouncement = line2;
-		announcerTextMesh.text = line1+"\n"+line2;
+		tempAnnouncement[4] = tempAnnouncement[3];
+		tempAnnouncement[3] = tempAnnouncement[2];
+		tempAnnouncement[2] = tempAnnouncement[1];
+		tempAnnouncement[1] = tempAnnouncement[0];
+		tempAnnouncement[0] = announcement;
+		announcerTextMesh.text = tempAnnouncement[4]+"\n"+tempAnnouncement[3]+"\n"+tempAnnouncement[2]+"\n"+tempAnnouncement[1]+"\n"+tempAnnouncement[0];
 	}
 
 	void UpdateScores(List<GameObject> players)
@@ -30,7 +32,7 @@ public class ScoreView : MonoBehaviour
 		
 		tempScores = new List<string>(noOfDice);
 		
-		scoreTextMesh.fontSize = Mathf.Min(48f/players.Count, 48f/(2+noOfDice));
+		scoreTextMesh.fontSize = Mathf.Min(96f/players.Count, 96f/(2+noOfDice));
 		string line1 = "Player:";
 		string lastLine = "Score :";
 		for (var j = 0; j < noOfDice; j++)
@@ -57,13 +59,28 @@ public class ScoreView : MonoBehaviour
 			}
 			for (var j = 0; j < noOfDice; j++)
 			{
-				if (players[i].GetComponent<PlayerWeek5>().diceRolls[j] < 10)
+				//add colour
+				if (j<players[i].GetComponent<PlayerWeek5>().noOfDiceLock)
 				{
-					tempScores[j] += "|  "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |";
+					if (players[i].GetComponent<PlayerWeek5>().diceRolls[j] < 10)
+					{
+						tempScores[j] += "<color=red>|  "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |</color>";
+					}
+					else
+					{
+						tempScores[j] += "<color=red>| "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |</color>";
+					}
 				}
 				else
 				{
-					tempScores[j] += "| "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |";
+					if (players[i].GetComponent<PlayerWeek5>().diceRolls[j] < 10)
+					{
+						tempScores[j] += "|  "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |";
+					}
+					else
+					{
+						tempScores[j] += "| "+players[i].GetComponent<PlayerWeek5>().diceRolls[j]+" |";
+					}
 				}
 			}
 			if (players[i].GetComponent<PlayerWeek5>().diceRolls.Sum() < 10)

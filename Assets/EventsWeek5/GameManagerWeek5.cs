@@ -58,7 +58,8 @@ public class GameManagerWeek5 : MonoBehaviour
 	void Start()
 	{
 		StartGame();
-		UIAnnouncementEvent?.Invoke("Player 1 goes first.\nPress 'Space' to roll.");
+		UIAnnouncementEvent?.Invoke("Player 1 goes first.");
+		UIAnnouncementEvent?.Invoke("Press 'Space' to roll.");
 	}
 
 	void Update()
@@ -71,7 +72,7 @@ public class GameManagerWeek5 : MonoBehaviour
 				{
 					if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock < totalDice)
 					{
-						for (int j = 0; j < totalDice-players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock; j++)
+						for (int j = totalDice-1; j >= players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock; j--)
 						{
 							players[playersIndex].GetComponent<PlayerWeek5>().diceRolls[j] = Roll();
 							
@@ -115,13 +116,21 @@ public class GameManagerWeek5 : MonoBehaviour
 					{
 						//display whose turn it is
 						UIAnnouncementEvent?.Invoke("Player "+(playersIndex+1)+"'s turn.");
+						if (players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked)
+						{
+							UIAnnouncementEvent?.Invoke("Press 'Space' to roll.");
+						}
+						else
+						{
+							UIAnnouncementEvent?.Invoke("'Arrows' to lock dice. 'Space' to confirm.");
+						}
 					}
 				}
 				else
 				{
 					players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked = true;
 					//state player's dice are locked and how many
-					UIAnnouncementEvent?.Invoke("Player "+(playersIndex+1)+" has locked "+players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock+" dice.");
+					UIAnnouncementEvent?.Invoke("Player "+(playersIndex+1)+" has locked "+players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock+" dice. 'Space' to roll.");
 				}
 			}
 			else
@@ -133,7 +142,11 @@ public class GameManagerWeek5 : MonoBehaviour
 				}
 
 				currentRound = 1;
-				players[0].GetComponent<PlayerWeek5>().isDiceLocked = true;
+				foreach (var t in players)
+				{
+					t.GetComponent<PlayerWeek5>().noOfDiceLock =0;
+					t.GetComponent<PlayerWeek5>().isDiceLocked = true;
+				}
 				scores = new int[totalPlayers];
 				UIAnnouncementEvent?.Invoke("Game Reset.");
 				UIScoreEvent?.Invoke(players);
@@ -149,6 +162,7 @@ public class GameManagerWeek5 : MonoBehaviour
 				{
 					players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock++;
 					//display new number of locked dice
+					UIScoreEvent?.Invoke(players);
 				}
 			}
 		}
@@ -157,10 +171,11 @@ public class GameManagerWeek5 : MonoBehaviour
 		{
 			if (!players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked)
 			{
-				if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock < 0)
+				if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock > 0)
 				{
 					players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock--;
 					//display new number of locked dice
+					UIScoreEvent?.Invoke(players);
 				}
 			}
 		}

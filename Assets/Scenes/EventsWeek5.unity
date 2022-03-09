@@ -431,6 +431,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7257200630236946344, guid: 83a35091f92313343bc1d98a4fdefea9, type: 3}
+      propertyPath: totalDice
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7257200630236946344, guid: 83a35091f92313343bc1d98a4fdefea9, type: 3}
       propertyPath: playerPrefab
       value: 
       objectReference: {fileID: 8856651825498816844, guid: f5deb531b3445ad45a392f400e06951d, type: 3}
@@ -458,6 +462,20 @@ PrefabInstance:
     - target: {fileID: 200759804610005925, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3691737691598697531, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
+      propertyPath: m_text
+      value: '
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3691737691598697531, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 3691737691598697531, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5594449401291987002, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
       propertyPath: m_Name
@@ -553,7 +571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7970290716069890056, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 110
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cce1702a7f203bf448bb1c0e6bbff68c, type: 3}
