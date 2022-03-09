@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class PlayerWeek5 : MonoBehaviour
 {
-	public EventManagerWeek5 EM;
+	public GameManagerWeek5 gameManager;
 	public int[] diceRolls;
 	public bool isDiceLocked = true;
 	public int noOfDiceLock;
-	public int[] score;
 
 	public void ResetScore(int totalDice)
 	{
-		score = new int[totalDice];
+		diceRolls = new int[totalDice];
 	}
 
 	void OnEnable()
 	{
-		EventManagerWeek5.StartEvent += ResetScore;
+		gameManager = transform.parent.GetComponent<GameManagerWeek5>();
+		gameManager.StartEvent += ResetScore;
 	}
 
 	void OnDisable()
 	{
-		EventManagerWeek5.StartEvent -= ResetScore;
+		gameManager.StartEvent -= ResetScore;
 	}
 	
     // Start is called before the first frame update void Start()

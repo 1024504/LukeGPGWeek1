@@ -1,19 +1,41 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManagerWeek5 : MonoBehaviour
 {
 	// Even numbers are player 1's turn.
-	public EventManagerWeek5 EM;
-	public int currentPlayer;
-	public int currentTurn = 1;
-	public int totalTurns = 2;
+	public int playersIndex;
+	public int currentRound = 1;
+	public int totalRounds = 2;
 	public int totalPlayers = 1;
 	public int sidesOfDie = 6;
 	public int totalDice = 2;
-	public List<Player> players;
+	public GameObject playerPrefab;
+	public List<GameObject> players;
+	public int[] scores;
+
+	public delegate void StartGameAction(int totalDice);
+
+	public event StartGameAction StartEvent;
+
+	public void StartGame()
+	{
+		StartEvent?.Invoke(totalDice);
+		UIScoreEvent?.Invoke(players);
+	}
+
+	public delegate void UIAnnouncementAction(string announcement);
+
+	public event UIAnnouncementAction UIAnnouncementEvent;
+
+	public delegate void UIScoreAction(List<GameObject> players);
+	
+	public event UIScoreAction UIScoreEvent;
+
 
 	int Roll()
 	{
@@ -24,85 +46,121 @@ public class GameManagerWeek5 : MonoBehaviour
 		return roll;
 	}
 
-	// Start is called before the first frame update
+	void Awake()
+	{
+		scores = new int[totalPlayers];
+		for (var i=0; i<totalPlayers; i++)
+		{
+			players.Add(Instantiate(playerPrefab, transform));
+		}
+	}
+	
 	void Start()
 	{
-		players = new List<Player>(totalPlayers);
-
-		Debug.Log("Player 1 goes first.\nPress 'Space' to roll.");
+		StartGame();
+		UIAnnouncementEvent?.Invoke("Player 1 goes first.\nPress 'Space' to roll.");
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			if (currentTurn <= totalTurns)
+			if (currentRound <= totalRounds)
 			{
-				if (players[currentPlayer].isDiceLocked)
+				if (players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked)
 				{
-					if (players[currentPlayer].noOfDiceLock > 0)
+					if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock < totalDice)
 					{
-						// rolls dice for that player
-						for (int j = 0; j < players[currentPlayer].noOfDiceLock; j++)
+						for (int j = 0; j < totalDice-players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock; j++)
 						{
-							players[currentPlayer].diceRolls[j] = Roll();
+							players[playersIndex].GetComponent<PlayerWeek5>().diceRolls[j] = Roll();
+							
 						}
-
-						Debug.Log("Player " + currentPlayer+1 + " rolled a total of " +
-						          players[currentPlayer].diceRolls.Sum());
+						scores[playersIndex] = players[playersIndex].GetComponent<PlayerWeek5>().diceRolls.Sum();
+						UIScoreEvent?.Invoke(players);
 					}
 					
-					players[currentPlayer].isDiceLocked = false;
-					currentPlayer++;
-					if (currentPlayer == totalPlayers)
+					//message to say current score
+					UIAnnouncementEvent?.Invoke("Player " + (playersIndex+1) + " has a score of " +
+					                            scores[playersIndex]+".");
+					
+					players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked = false;
+					playersIndex++;
+					if (playersIndex == totalPlayers)
 					{
-						currentPlayer = 0;
-						currentTurn++;
-						if (currentTurn > totalTurns)
+						playersIndex = 0;
+						currentRound++;
+						//display current turn
+						UIAnnouncementEvent?.Invoke("Round "+currentRound+".");
+						if (currentRound > totalRounds)
 						{
 							// Game Over
-							players[0].isDiceLocked = true;
-							
+							UIAnnouncementEvent?.Invoke("Game Over");
+							var winnerIndex = 0;
+							var winnerScore = 0;
+							for (var i=0; i<totalPlayers; i++)
+							{
+								UIAnnouncementEvent?.Invoke("Player "+(i+1)+"'s score is: "+scores[i]+".");
+								//Just learned continue
+								if (scores[i] <= winnerScore) continue;
+								winnerScore = scores[i];
+								winnerIndex = i;
+							}
 							//display score and offer to start again.
+							UIAnnouncementEvent?.Invoke("Player "+(winnerIndex+1)+" is the winner with a score of "+winnerScore);
 						}
+					}
+
+					if (currentRound <= totalRounds)
+					{
+						//display whose turn it is
+						UIAnnouncementEvent?.Invoke("Player "+(playersIndex+1)+"'s turn.");
 					}
 				}
 				else
 				{
-					players[currentPlayer].isDiceLocked = true;
+					players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked = true;
+					//state player's dice are locked and how many
+					UIAnnouncementEvent?.Invoke("Player "+(playersIndex+1)+" has locked "+players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock+" dice.");
 				}
 			}
 			else
 			{
+				//resetting game
 				for (int i = 0; i < totalPlayers; i++)
 				{
-					players[i].diceRolls = new int[totalDice];
+					players[i].GetComponent<PlayerWeek5>().diceRolls = new int[totalDice];
 				}
 
-				currentTurn = 1;
-				players[0].isDiceLocked = false;
+				currentRound = 1;
+				players[0].GetComponent<PlayerWeek5>().isDiceLocked = true;
+				scores = new int[totalPlayers];
+				UIAnnouncementEvent?.Invoke("Game Reset.");
+				UIScoreEvent?.Invoke(players);
+				//update scoreboard***
 			}
 		}
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))
 		{
-			if (!players[currentPlayer].isDiceLocked)
+			if (!players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked)
 			{
-				if (players[currentPlayer].noOfDiceLock < totalDice)
+				if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock < totalDice)
 				{
-					players[currentPlayer].noOfDiceLock++;
+					players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock++;
+					//display new number of locked dice
 				}
 			}
 		}
 		
 		if (Input.GetKeyDown(KeyCode.DownArrow))
 		{
-			if (!players[currentPlayer].isDiceLocked)
+			if (!players[playersIndex].GetComponent<PlayerWeek5>().isDiceLocked)
 			{
-				if (players[currentPlayer].noOfDiceLock < 0)
+				if (players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock < 0)
 				{
-					players[currentPlayer].noOfDiceLock--;
+					players[playersIndex].GetComponent<PlayerWeek5>().noOfDiceLock--;
+					//display new number of locked dice
 				}
 			}
 		}
