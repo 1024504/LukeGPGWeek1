@@ -52,10 +52,15 @@ MonoBehaviour:
   dampingCoefficient: 1.5
   restingWheelHeight: 1
   wheelExtensionFactor: 1.5
+  isRearSteering: 0
+  longitudinalFrictionCoefficient: 0
   lateralFrictionCoefficient: 0
   acceleratingForce: 0
   brakingForce: 0
   reversingForce: 0
+  maxFullSteerVelocity: 15
+  minSteerFactor: 2
+  currentRotation: 0
   maxRotation: 0
   localVelocity: {x: 0, y: 0, z: 0}
   origin: {x: 0, y: 0, z: 0}

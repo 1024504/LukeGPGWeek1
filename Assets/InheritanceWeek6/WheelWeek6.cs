@@ -12,16 +12,20 @@ public class WheelWeek6 : MonoBehaviour
 	public bool canSteer;
 	public bool canDrive;
 	public Vector3 steerAngle;
-	public float springCoefficient = 5f;
-	public float dampingCoefficient = 1.5f;
-	public float restingWheelHeight = 1f;
-	public float wheelExtensionFactor = 1.5f;
-	public bool isRearSteering;
-	
+	public float springCoefficient;
+	public float dampingCoefficient;
+	public float restingWheelHeight;
+	public float wheelExtensionFactor;
+	public bool isRearWheel;
+
+	public float longitudinalFrictionCoefficient;
 	public float lateralFrictionCoefficient;
 	public float acceleratingForce;
 	public float brakingForce;
 	public float reversingForce;
+	public float maxFullSteerVelocity;
+	public float minSteerFactor;
+	public float currentRotation;
 	public float maxRotation;
 
 	public Vector3 localVelocity;
@@ -35,10 +39,19 @@ public class WheelWeek6 : MonoBehaviour
 		Debug.DrawRay(Ray.origin, Ray.direction, Color.green);
 		if (Physics.Raycast(Ray, out RaycastHit, restingWheelHeight*wheelExtensionFactor))
 		{
+			//suspension
 			chassis.AddForceAtPosition((springCoefficient * (restingWheelHeight - RaycastHit.distance)
 			                            - dampingCoefficient * Vector3.Dot(chassis.velocity,
 				                            car.transform.TransformDirection(Vector3.up)))
 			                           * transform.TransformDirection(Vector3.up), origin, 0);
+			//longitudinal friction
+			chassis.AddForceAtPosition(longitudinalFrictionCoefficient*chassis.mass*transform.
+				TransformDirection(new Vector3 (0, 0, -localVelocity.z/3f)), origin);
+			
+			
+			//lateral friction
+			chassis.AddForceAtPosition(lateralFrictionCoefficient*chassis.mass*transform.
+				TransformDirection(new Vector3 (-localVelocity.x, 0, 0)), origin);
 			return true;
 		}
 		return false;
@@ -49,28 +62,28 @@ public class WheelWeek6 : MonoBehaviour
 		switch (carClass.drivingMode) 
 		{
 			case VehicleBase.DrivingModes.Drive:
-				if (Vector3.Dot(chassis.velocity, car.transform.TransformDirection(Vector3.forward)) < 0)
+				if (Vector3.Dot(chassis.velocity, transform.TransformDirection(Vector3.forward)) < 0)
 				{
-					chassis.AddForceAtPosition((brakingForce*car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					chassis.AddForceAtPosition((brakingForce*transform.TransformDirection(Vector3.forward)), origin, 0);
 				}
 				else
 				{
 					if (canDrive)
 					{
-						chassis.AddForceAtPosition((acceleratingForce * car.transform.TransformDirection(Vector3.forward)), origin, 0);
+						chassis.AddForceAtPosition((acceleratingForce * transform.TransformDirection(Vector3.forward)), origin, 0);
 					}
 				}
 				break;
 			case VehicleBase.DrivingModes.Reverse:
-				if (Vector3.Dot(chassis.velocity, car.transform.TransformDirection(Vector3.forward)) > 0)
+				if (Vector3.Dot(chassis.velocity, transform.TransformDirection(Vector3.forward)) > 0)
 				{
-					chassis.AddForceAtPosition((-brakingForce*car.transform.TransformDirection(Vector3.forward)), origin, 0);
+					chassis.AddForceAtPosition((-brakingForce*transform.TransformDirection(Vector3.forward)), origin, 0);
 				}
 				else
 				{
 					if (canDrive)
 					{
-						chassis.AddForceAtPosition((-reversingForce * car.transform.TransformDirection(Vector3.forward)), origin, 0);
+						chassis.AddForceAtPosition((-reversingForce * transform.TransformDirection(Vector3.forward)), origin, 0);
 					}
 				}
 				break;
@@ -79,13 +92,15 @@ public class WheelWeek6 : MonoBehaviour
 
 	private void ApplySteering()
 	{
+		currentRotation = Mathf.Clamp(maxRotation*(1-(1-1/minSteerFactor)*Mathf.Abs(localVelocity.z)/maxFullSteerVelocity),
+			maxRotation/minSteerFactor, maxRotation);
 		switch (carClass.steeringMode)
 		{
 			case VehicleBase.SteeringModes.Left:
-				steerAngle = new Vector3 (0, -maxRotation, 0);
+				steerAngle = new Vector3 (0, -currentRotation, 0);
 				break;
 			case VehicleBase.SteeringModes.Right:
-				steerAngle = new Vector3 (0, maxRotation, 0);
+				steerAngle = new Vector3 (0, currentRotation, 0);
 				break;
 			case VehicleBase.SteeringModes.Neutral:
 				steerAngle = Vector3.zero;
@@ -103,7 +118,7 @@ public class WheelWeek6 : MonoBehaviour
 	    // should I even have this, or should I just set the bool in the prefab?
 	    if (transform.InverseTransformDirection(transform.position).z < transform.InverseTransformDirection(transform.parent.position).z)
 	    {
-		    isRearSteering = true;
+		    isRearWheel = true;
 	    }
     }
 
@@ -122,7 +137,7 @@ public class WheelWeek6 : MonoBehaviour
 		    if (canSteer)
 		    {
 			    ApplySteering();
-			    if (isRearSteering)
+			    if (isRearWheel)
 			    {
 				    transform.localEulerAngles = -steerAngle;
 			    }
@@ -132,7 +147,6 @@ public class WheelWeek6 : MonoBehaviour
 			    }
 		    }
 		    
-		    chassis.AddForceAtPosition(lateralFrictionCoefficient*chassis.mass*transform.TransformDirection(new Vector3 (-localVelocity.x, 0, 0)), origin);
 		    
 	    }
 	}

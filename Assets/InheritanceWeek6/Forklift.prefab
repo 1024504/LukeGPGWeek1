@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 659669795729582354}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6540247652845489958
 Transform:
   m_ObjectHideFlags: 0
@@ -40,7 +40,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3830886135955565228}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -83,7 +83,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3830886135955565228}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &5975111160074966194
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 5975111160745004283}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.22, z: 0}
-  m_LocalScale: {x: 3.3202834, y: 1.8041539, z: 6.1897135}
+  m_LocalScale: {x: 6.620559, y: 2.4582734, z: 7.9809136}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5975111160074966193}
@@ -302,13 +302,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   wheels: []
-  acceleratingForce: 5
-  brakingForce: 10
-  reversingForce: 3
+  Camera: {fileID: 0}
+  acceleratingForce: 10
+  brakingForce: 20
+  reversingForce: 10
   maxWheelRotation: 25
+  longitudinalFrictionCoefficient: 0.05
   lateralFrictionCoefficient: 0.5
+  springCoefficient: 5
+  dampingCoefficient: 1.5
+  restingWheelHeight: 1
+  wheelExtensionFactor: 2.5
+  maxFullSteerVelocity: 10
+  minSteerFactor: 1.5
   active: 0
-  subscribed: 0
   drivingMode: 0
   steeringMode: 0
 --- !u!1001 &1650598100116720161
@@ -399,15 +406,19 @@ MonoBehaviour:
   canSteer: 1
   canDrive: 1
   steerAngle: {x: 0, y: 0, z: 0}
-  springCoefficient: 5
-  dampingCoefficient: 1.5
-  restingWheelHeight: 1
-  wheelExtensionFactor: 1.5
-  isRearSteering: 0
+  springCoefficient: 0
+  dampingCoefficient: 0
+  restingWheelHeight: 0
+  wheelExtensionFactor: 0
+  isRearWheel: 0
+  longitudinalFrictionCoefficient: 0
   lateralFrictionCoefficient: 0
   acceleratingForce: 0
   brakingForce: 0
   reversingForce: 0
+  maxFullSteerVelocity: 0
+  minSteerFactor: 0
+  currentRotation: 0
   maxRotation: 0
   localVelocity: {x: 0, y: 0, z: 0}
   origin: {x: 0, y: 0, z: 0}
@@ -497,15 +508,19 @@ MonoBehaviour:
   canSteer: 0
   canDrive: 0
   steerAngle: {x: 0, y: 0, z: 0}
-  springCoefficient: 5
-  dampingCoefficient: 1.5
-  restingWheelHeight: 1
-  wheelExtensionFactor: 1.5
-  isRearSteering: 0
+  springCoefficient: 0
+  dampingCoefficient: 0
+  restingWheelHeight: 0
+  wheelExtensionFactor: 0
+  isRearWheel: 0
+  longitudinalFrictionCoefficient: 0
   lateralFrictionCoefficient: 0
   acceleratingForce: 0
   brakingForce: 0
   reversingForce: 0
+  maxFullSteerVelocity: 0
+  minSteerFactor: 0
+  currentRotation: 0
   maxRotation: 0
   localVelocity: {x: 0, y: 0, z: 0}
   origin: {x: 0, y: 0, z: 0}
@@ -603,15 +618,19 @@ MonoBehaviour:
   canSteer: 1
   canDrive: 1
   steerAngle: {x: 0, y: 0, z: 0}
-  springCoefficient: 5
-  dampingCoefficient: 1.5
-  restingWheelHeight: 1
-  wheelExtensionFactor: 1.5
-  isRearSteering: 0
+  springCoefficient: 0
+  dampingCoefficient: 0
+  restingWheelHeight: 0
+  wheelExtensionFactor: 0
+  isRearWheel: 0
+  longitudinalFrictionCoefficient: 0
   lateralFrictionCoefficient: 0
   acceleratingForce: 0
   brakingForce: 0
   reversingForce: 0
+  maxFullSteerVelocity: 0
+  minSteerFactor: 0
+  currentRotation: 0
   maxRotation: 0
   localVelocity: {x: 0, y: 0, z: 0}
   origin: {x: 0, y: 0, z: 0}
@@ -705,15 +724,19 @@ MonoBehaviour:
   canSteer: 0
   canDrive: 0
   steerAngle: {x: 0, y: 0, z: 0}
-  springCoefficient: 5
-  dampingCoefficient: 1.5
-  restingWheelHeight: 1
-  wheelExtensionFactor: 1.5
-  isRearSteering: 0
+  springCoefficient: 0
+  dampingCoefficient: 0
+  restingWheelHeight: 0
+  wheelExtensionFactor: 0
+  isRearWheel: 0
+  longitudinalFrictionCoefficient: 0
   lateralFrictionCoefficient: 0
   acceleratingForce: 0
   brakingForce: 0
   reversingForce: 0
+  maxFullSteerVelocity: 0
+  minSteerFactor: 0
+  currentRotation: 0
   maxRotation: 0
   localVelocity: {x: 0, y: 0, z: 0}
   origin: {x: 0, y: 0, z: 0}

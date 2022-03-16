@@ -6,15 +6,13 @@ using UnityEngine;
 public class Buggy : VehicleBase
 {
 	// Start is called before the first frame update
-	void Start()
+	public override void Start()
 	{
-		base.BaseStart();
+		base.Start();
 	}
-	
-	// Update is called once per frame
-	void Update()
+
+	public override void Update()
 	{
-		base.BaseUpdate();
-		//Debug.DrawRay(transform.position, GetComponent<Rigidbody>().velocity, Color.yellow);
+		base.Update();
 	}
 }

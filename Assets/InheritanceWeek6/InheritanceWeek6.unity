@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8dc600172c398845af27f37ec8e7ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 0}
 --- !u!4 &52203934
 Transform:
   m_ObjectHideFlags: 0
@@ -289,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -347,7 +348,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5975111160745004278, guid: 282c42b9cfd4bb441b3259bdec8f2d41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.5334134
+      value: -25.3
       objectReference: {fileID: 0}
     - target: {fileID: 5975111160745004278, guid: 282c42b9cfd4bb441b3259bdec8f2d41, type: 3}
       propertyPath: m_LocalPosition.y
@@ -355,7 +356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5975111160745004278, guid: 282c42b9cfd4bb441b3259bdec8f2d41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 75.839745
+      value: 85.2
       objectReference: {fileID: 0}
     - target: {fileID: 5975111160745004278, guid: 282c42b9cfd4bb441b3259bdec8f2d41, type: 3}
       propertyPath: m_LocalRotation.w

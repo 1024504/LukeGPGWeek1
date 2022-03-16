@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerWeek6 : MonoBehaviour
 {
+	public Camera Camera;
+	
 	public delegate void DriveAction(VehicleBase.DrivingModes mode);
 	public event DriveAction DriveEvent;
 		
@@ -13,9 +15,12 @@ public class PlayerWeek6 : MonoBehaviour
 	public delegate void DeactivateVehicleAction();
 	public event DeactivateVehicleAction DeactivateVehicleEvent;
 
+	public delegate void ResetAction();
+	public event ResetAction ResetEvent;
+
 	void Start()
     {
-	    
+	    Camera = Camera.main;
     }
 
     // Update is called once per frame
@@ -23,7 +28,8 @@ public class PlayerWeek6 : MonoBehaviour
     {
 	    if( Input.GetMouseButtonDown(0) )
 	    {
-		    DeactivateVehicleEvent?.Invoke();
+		    
+		    
 		    
 		    Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 		    RaycastHit hit;
@@ -32,9 +38,22 @@ public class PlayerWeek6 : MonoBehaviour
 		    {
 			    if (hit.transform.gameObject.GetComponent<VehicleBase>())
 			    {
+				    DeactivateVehicleEvent?.Invoke();
 				    hit.transform.gameObject.GetComponent<VehicleBase>().player = this;
-				    hit.transform.gameObject.GetComponent<VehicleBase>().active = true;
+				    hit.transform.gameObject.GetComponent<VehicleBase>().ActivateVehicle();
+				    hit.transform.gameObject.GetComponent<VehicleBase>().Camera.enabled = true;
+				    Camera.enabled = false;
 			    }
+			    else
+			    {
+				    DeactivateVehicleEvent?.Invoke();
+				    Camera.enabled = true;
+			    }
+		    }
+		    else
+		    {
+			    DeactivateVehicleEvent?.Invoke();
+			    Camera.enabled = true;
 		    }
 	    }
 	    
@@ -62,6 +81,11 @@ public class PlayerWeek6 : MonoBehaviour
 	    else
 	    {
 		    SteerEvent?.Invoke(VehicleBase.SteeringModes.Neutral);
+	    }
+
+	    if (Input.GetKeyDown(KeyCode.R))
+	    {
+		    ResetEvent?.Invoke();
 	    }
     }
 }
