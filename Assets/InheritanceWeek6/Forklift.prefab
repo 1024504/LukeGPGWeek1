@@ -303,9 +303,9 @@ MonoBehaviour:
   player: {fileID: 0}
   wheels: []
   Camera: {fileID: 0}
-  acceleratingForce: 10
+  acceleratingForce: 8
   brakingForce: 20
-  reversingForce: 10
+  reversingForce: 8
   maxWheelRotation: 25
   longitudinalFrictionCoefficient: 0.05
   lateralFrictionCoefficient: 0.5

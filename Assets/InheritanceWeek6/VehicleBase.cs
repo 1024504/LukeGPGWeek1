@@ -49,7 +49,7 @@ public class VehicleBase : MonoBehaviour
 	public virtual void ResetVehicle()
 	{
 		transform.position += new Vector3 (0f,5f,0f);
-		transform.localRotation = Quaternion.Euler(Vector3.Scale(transform.localEulerAngles, new Vector3 (1f,1f,0f)));
+		transform.localRotation = Quaternion.Euler(Vector3.Scale(transform.localEulerAngles, new Vector3 (0f,1f,0f)));
 	}
 
 	public virtual void ActivateVehicle()

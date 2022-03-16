@@ -34,7 +34,7 @@ public class PlayerWeek6 : MonoBehaviour
 		    Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 		    RaycastHit hit;
 		    
-		    if( Physics.Raycast( ray, out hit, 1000f ) )
+		    if( Physics.Raycast( ray, out hit ) )
 		    {
 			    if (hit.transform.gameObject.GetComponent<VehicleBase>())
 			    {
