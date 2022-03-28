@@ -17,10 +17,28 @@ public class WorldTile : MonoBehaviour
 	    {
 		    for (var j = 0; j <= 2*terrainSpawnRange; j++)
 		    {
+			    string temp1;
+			    string temp2;
 			    GameObject go = Instantiate(worldTile, gameObject.transform);
-			    go.name = i.ToString()+j.ToString();
+			    if (i < 10)
+			    {
+				    temp1 = "0" + i.ToString();
+			    }
+			    else
+			    {
+				    temp1 = i.ToString();
+			    }
+			    if (j < 10)
+			    {
+				    temp2 = "0" + j.ToString();
+			    }
+			    else
+			    {
+				    temp2 = j.ToString();
+			    }
+			    go.name = temp1+temp2;
 			    // if you set the y position to 1/2 the scaled perlin noise, you get a flat underside.
-			    go.transform.position = new Vector3(i-terrainSpawnRange, 0, j-terrainSpawnRange);
+			    go.transform.position = new Vector3(i-terrainSpawnRange, 1+amplitude*Mathf.PerlinNoise(i/waveLength, j/waveLength), j-terrainSpawnRange);
 			    go.transform.localScale = new Vector3(1, 1+amplitude*Mathf.PerlinNoise(i/waveLength, j/waveLength), 1);
 		    }
 	    }
