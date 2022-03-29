@@ -6,15 +6,16 @@ using UnityEngine;
 public class TerrainScript : MonoBehaviour
 {
 	public int depth = 20;
-	public int height = 256;
+	public int length = 256;
 	public int width = 256;
-	public float scale = 20f;
+	public float frequency = 20f;
+	public float amplitude = 1f;
 
 	TerrainData GenerateTerrain(TerrainData terrainData)
 	{
 		terrainData.heightmapResolution = width + 1;
 		
-		terrainData.size = new Vector3(width, depth, height);
+		terrainData.size = new Vector3(width, depth, length);
 		
 		terrainData.SetHeights(0,0,GenerateHeights());
 
@@ -23,10 +24,10 @@ public class TerrainScript : MonoBehaviour
 
 	float[,] GenerateHeights()
 	{
-		float[,] heights = new float[width, height];
+		float[,] heights = new float[width, length];
 		for (int i=0; i<width; i++)
 		{
-			for (int j=0; j < height; j++)
+			for (int j=0; j < length; j++)
 			{
 				heights[i, j] = CalculateHeight(i, j);	
 			}
@@ -37,10 +38,10 @@ public class TerrainScript : MonoBehaviour
 
 	float CalculateHeight(int x, int y)
 	{
-		float xCoord = (float) x / width*scale;
-		float ycoord = (float) y / height*scale;
+		float xCoord = (float) x / width*frequency;
+		float ycoord = (float) y / length*frequency;
 
-		return Mathf.PerlinNoise( xCoord,  ycoord);
+		return amplitude * Mathf.PerlinNoise( xCoord,  ycoord);
 	}
 
 
